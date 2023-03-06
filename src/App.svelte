@@ -26,7 +26,7 @@
   .god {
     transition: all 0.75s ease;
   }
-  .god:hover {
+  .god:hover:not(.god-animate) {
     filter: drop-shadow(0 0 2em white);
   }
 

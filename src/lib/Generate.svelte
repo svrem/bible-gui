@@ -117,9 +117,8 @@
     const random_order = sentences.sort(() => 0.5 - Math.random());
     const random_sentences = random_order.slice(0, 7);
 
-    for (let i = 0; i < random_sentences.length; i++) {
-      const sentence = random_sentences[i];
-
+    for (const sentence_index in random_sentences) {
+      const sentence = random_sentences[sentence_index];
       verse.text = sentence;
 
       await new Promise((resolve) => setTimeout(resolve, sentence.length * 75));
