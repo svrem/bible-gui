@@ -2,8 +2,8 @@
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
 use reqwest;
-use tauri::SystemTray;
-use tauri::{CustomMenuItem, Manager, SystemTrayMenu};
+use tauri::{AppHandle, CustomMenuItem, Manager, SystemTrayMenu};
+use tauri::{SystemTray, SystemTrayEvent};
 
 // Learn more about Tauri commands at https://tauri.app/v1/guides/features/command
 #[tauri::command]
@@ -20,6 +20,17 @@ async fn generate() -> String {
         Ok(text) => {
             return text;
         }
+    }
+}
+
+fn event_handler(app: &AppHandle, event: SystemTrayEvent) {
+    match event {
+        SystemTrayEvent::MenuItemClick { id, .. } => match id.as_str() {
+            "generate" => app.emit_all("generate", {}).unwrap(),
+
+            _ => {}
+        },
+        _ => {}
     }
 }
 
@@ -42,6 +53,7 @@ fn main() {
     tauri::Builder::default()
         .system_tray(tray)
         .invoke_handler(tauri::generate_handler![close_splashscreen, generate])
+        .on_system_tray_event(|app, event| event_handler(app, event))
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }
