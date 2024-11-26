@@ -8,7 +8,14 @@ use tauri::{SystemTray, SystemTrayEvent};
 // Learn more about Tauri commands at https://tauri.app/v1/guides/features/command
 #[tauri::command]
 async fn generate() -> String {
-    let request = reqwest::get("https://labs.bible.org/api/?passage=random&type=json").await;
+    let client = reqwest::Client::new();
+    let request = client
+        .get("https://labs.bible.org/api/?passage=random&type=json")
+        .header("User-Agent", "tauri-app")
+        .send()
+        .await;
+
+    // let request = reqwest::get("https://labs.bible.org/api/?passage=random&type=json").await;
 
     let text = match request {
         Err(_why) => return String::from("Failed to fetch bible verse"),

@@ -125,6 +125,7 @@
     }
 
     const verse_string: string = await verse_request;
+    console.log(verse_string);
 
     verse = JSON.parse(verse_string)[0];
     loading = false;
